@@ -77,14 +77,37 @@ const parseAndValidateInputs = () => {
     };
 }
 
+/**
+ * generate event related link
+ * @param {*} event 
+ * @param {*} repository 
+ * @returns 
+ */
+const generateLink = (e, repository) => {
+    const mappings = {
+        "issue_comment": "issues",
+        "issues": "issues",
+        "pull_request": "pulls",
+        "pull_request_review_comment": "pulls",
+        "push": "commits",
+        "project_card": "projects",
+    };
+
+    const type = mappings[e.toLowerCase()];
+    return `https://github.com/${repository}/${type}/`;
+
+}
+
 async function run() {
 
     // get & check inputs and validity 
-    const { } = parseAndValidateInputs();
+    const {
+        event: Event, repository, actor, status, workflow,
+        token, to, text, thread_id, disable_web_page_preview,
+        disable_notification } = parseAndValidateInputs();
+    const link = generateLink(Event, repository);
 
-    // create lin to all event !!
-
-    sendTextMessage(token, to, encodeURI('text'), thread_id, disable_web_page_preview, disable_notification);
+    sendTextMessage(token, to, encodeURI(text), thread_id, disable_web_page_preview, disable_notification);
 }
 
 run().catch(e => setFailed(e));
