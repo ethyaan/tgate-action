@@ -58,7 +58,6 @@ const parseAndValidateInputs = () => {
     const token = getInput('token');
     const to = getInput('to');
     const thread_id = getInput('thread_id');
-    const text = getInput('text');
     const disable_web_page_preview = getInput('disable_web_page_preview') || false;
     const disable_notification = getInput('disable_notification') || false;
     const status = getInput('status');
@@ -69,7 +68,6 @@ const parseAndValidateInputs = () => {
 
     checkFieldValidity(token, 'Token is not valid');
     checkFieldValidity(to, 'to address is not valid');
-    checkFieldValidity(text, 'text is not valid'); // this here may cause problem later we add more message types
 
     return {
         token, to, thread_id, text, disable_web_page_preview, disable_notification,
@@ -98,6 +96,48 @@ const generateLink = (e, repository) => {
 
 }
 
+/**
+ * replace all string in given array
+ * @param {*} str 
+ * @param {*} obj 
+ * @returns 
+ */
+function allReplace(str, obj) {
+    for (const x in obj) {
+        str = str.replace(new RegExp(x, 'g'), obj[x]);
+    }
+    return str;
+};
+
+/**
+ * compose our message
+ * @param {*} status 
+ * @param {*} event 
+ * @param {*} actor 
+ * @param {*} repo 
+ * @param {*} workflow 
+ * @param {*} link 
+ * @returns 
+ */
+const composer = (status, event, actor, repo, workflow, link) => {
+    const icons = {
+        "failure": "❗️❗️❗️",
+        "cancelled": "❕❕❕",
+        "success": "✅✅✅"
+    };
+    const replacers = { "_": "\\_", "-": "\\-", ".": "\\." };
+
+    let Event = allReplace(event, replacers).toUpperCase();
+    let Repo = allReplace(repo, replacers).toLowerCase();
+    let Actor = allReplace(actor, replacers).toLowerCase();
+
+    const text = `${icons[status]} *${Event}*
+    was made at ${Repo}
+    by ${Actor}
+    check here [${workflow}](${link})`;
+    return text;
+}
+
 async function run() {
 
     // get & check inputs and validity 
@@ -106,8 +146,9 @@ async function run() {
         token, to, text, thread_id, disable_web_page_preview,
         disable_notification } = parseAndValidateInputs();
     const link = generateLink(Event, repository);
+    const message = composer(status, Event, actor, repository, workflow, link);
 
-    sendTextMessage(token, to, encodeURI(text), thread_id, disable_web_page_preview, disable_notification);
+    sendTextMessage(token, to, encodeURI(message), thread_id, disable_web_page_preview, disable_notification);
 }
 
 run().catch(e => setFailed(e));
