@@ -9692,21 +9692,107 @@ const sendTextMessage = (token, chat_id, text, thread_id = null, disable_web_pag
     }
 }
 
-async function run() {
+/**
+ * 
+ * get and prevalidate action inputs
+ */
+const parseAndValidateInputs = () => {
 
     // get & check inputs and validity 
     const token = (0,core.getInput)('token');
     const to = (0,core.getInput)('to');
     const thread_id = (0,core.getInput)('thread_id');
-    const text = (0,core.getInput)('text');
     const disable_web_page_preview = (0,core.getInput)('disable_web_page_preview') || false;
     const disable_notification = (0,core.getInput)('disable_notification') || false;
+    const status = (0,core.getInput)('status');
+    const event = (0,core.getInput)('status');
+    const actor = (0,core.getInput)('status');
+    const repository = (0,core.getInput)('status');
+    const workflow = (0,core.getInput)('status');
 
     checkFieldValidity(token, 'Token is not valid');
     checkFieldValidity(to, 'to address is not valid');
-    checkFieldValidity(text, 'text is not valid');
 
-    sendTextMessage(token, to, encodeURI('text'), thread_id, disable_web_page_preview, disable_notification);
+    return {
+        token, to, thread_id, text, disable_web_page_preview, disable_notification,
+        status, event, actor, repository, workflow
+    };
+}
+
+/**
+ * generate event related link
+ * @param {*} event 
+ * @param {*} repository 
+ * @returns 
+ */
+const generateLink = (e, repository) => {
+    const mappings = {
+        "issue_comment": "issues",
+        "issues": "issues",
+        "pull_request": "pulls",
+        "pull_request_review_comment": "pulls",
+        "push": "commits",
+        "project_card": "projects",
+    };
+
+    const type = mappings[e.toLowerCase()];
+    return `https://github.com/${repository}/${type}/`;
+
+}
+
+/**
+ * replace all string in given array
+ * @param {*} str 
+ * @param {*} obj 
+ * @returns 
+ */
+function allReplace(str, obj) {
+    for (const x in obj) {
+        str = str.replace(new RegExp(x, 'g'), obj[x]);
+    }
+    return str;
+};
+
+/**
+ * compose our message
+ * @param {*} status 
+ * @param {*} event 
+ * @param {*} actor 
+ * @param {*} repo 
+ * @param {*} workflow 
+ * @param {*} link 
+ * @returns 
+ */
+const composer = (status, event, actor, repo, workflow, link) => {
+    const icons = {
+        "failure": "❗️❗️❗️",
+        "cancelled": "❕❕❕",
+        "success": "✅✅✅"
+    };
+    const replacers = { "_": "\\_", "-": "\\-", ".": "\\." };
+
+    let Event = allReplace(event, replacers).toUpperCase();
+    let Repo = allReplace(repo, replacers).toLowerCase();
+    let Actor = allReplace(actor, replacers).toLowerCase();
+
+    const text = `${icons[status]} *${Event}*
+    was made at ${Repo}
+    by ${Actor}
+    check here [${workflow}](${link})`;
+    return text;
+}
+
+async function run() {
+
+    // get & check inputs and validity 
+    const {
+        event: Event, repository, actor, status, workflow,
+        token, to, text, thread_id, disable_web_page_preview,
+        disable_notification } = parseAndValidateInputs();
+    const link = generateLink(Event, repository);
+    const message = composer(status, Event, actor, repository, workflow, link);
+
+    sendTextMessage(token, to, encodeURI(message), thread_id, disable_web_page_preview, disable_notification);
 }
 
 run().catch(e => (0,core.setFailed)(e));
