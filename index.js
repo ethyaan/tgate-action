@@ -48,7 +48,11 @@ const sendTextMessage = (token, chat_id, text, thread_id = null, disable_web_pag
     }
 }
 
-async function run() {
+/**
+ * 
+ * get and prevalidate action inputs
+ */
+const parseAndValidateInputs = () => {
 
     // get & check inputs and validity 
     const token = getInput('token');
@@ -57,10 +61,28 @@ async function run() {
     const text = getInput('text');
     const disable_web_page_preview = getInput('disable_web_page_preview') || false;
     const disable_notification = getInput('disable_notification') || false;
+    const status = getInput('status');
+    const event = getInput('status');
+    const actor = getInput('status');
+    const repository = getInput('status');
+    const workflow = getInput('status');
 
     checkFieldValidity(token, 'Token is not valid');
     checkFieldValidity(to, 'to address is not valid');
-    checkFieldValidity(text, 'text is not valid');
+    checkFieldValidity(text, 'text is not valid'); // this here may cause problem later we add more message types
+
+    return {
+        token, to, thread_id, text, disable_web_page_preview, disable_notification,
+        status, event, actor, repository, workflow
+    };
+}
+
+async function run() {
+
+    // get & check inputs and validity 
+    const { } = parseAndValidateInputs();
+
+    // create lin to all event !!
 
     sendTextMessage(token, to, encodeURI('text'), thread_id, disable_web_page_preview, disable_notification);
 }
