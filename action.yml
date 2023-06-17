@@ -15,7 +15,22 @@ inputs:
   disable_web_page_preview:
     description: 'disables link previews for links in this message'
   disable_notification:
-    description: 'disables notifications for this message, supports sending a message without notification,'
+    description: 'disables notifications for this message, supports sending a message without notification.'
+  status: 
+    description: 'Job status'
+    default: ${{ job.status }}
+  event: 
+    description: 'Event triggered action'
+    default: ${{ github.event_name }}
+  actor: 
+    description: 'Actor who did the action'
+    default: ${{ github.actor }}
+  repository: 
+    description: 'github repository name'
+    default: ${{ github.repository }}
+  workflow: 
+    description: 'github workflow name'
+    default: ${{ github.workflow }}
 
 runs:
   using: 'node16'
