@@ -1,0 +1,29 @@
+{
+  "name": "tgate-action",
+  "version": "1.0.0",
+  "description": "Telegram gate action for github to integrate github notification with telegram",
+  "main": "index.js",
+  "scripts": {
+    "build": "./node_modules/.bin/ncc build index.js -a",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethyaan/tgate-action.git"
+  },
+  "keywords": [
+    "telegram"
+  ],
+  "type": "module",
+  "author": "Ethyaan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ethyaan/tgate-action/issues"
+  },
+  "homepage": "https://github.com/ethyaan/tgate-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@vercel/ncc": "^0.36.1",
+    "axios": "^1.4.0"
+  }
+}

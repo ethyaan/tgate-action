@@ -1,0 +1,26 @@
+name: 'Telegram Gate'
+description: 'Telegram Notification for Github action'
+author: 'Ethyaan'
+
+inputs:
+  token:
+    description: 'Telegram bot Token'
+    required: true
+  to:
+    description: 'Chat id, group or chanel'
+  thread_id:
+    description: 'id of thread or topic to send inside'
+  text:
+    description: 'text message'
+  disable_web_page_preview:
+    description: 'disables link previews for links in this message'
+  disable_notification:
+    description: 'disables notifications for this message, supports sending a message without notification,'
+
+runs:
+  using: 'node16'
+  main: 'index.js'
+
+branding:
+  icon: 'message-square'
+  color: 'green'
