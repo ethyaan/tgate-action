@@ -9707,10 +9707,10 @@ const parseAndValidateInputs = () => {
     const disable_web_page_preview = (0,core.getInput)('disable_web_page_preview') || false;
     const disable_notification = (0,core.getInput)('disable_notification') || false;
     const status = (0,core.getInput)('status');
-    const event = (0,core.getInput)('status');
-    const actor = (0,core.getInput)('status');
-    const repository = (0,core.getInput)('status');
-    const workflow = (0,core.getInput)('status');
+    const event = (0,core.getInput)('event');
+    const actor = (0,core.getInput)('actor');
+    const repository = (0,core.getInput)('repository');
+    const workflow = (0,core.getInput)('workflow');
 
     checkFieldValidity(token, 'Token is not valid');
     checkFieldValidity(to, 'to address is not valid');

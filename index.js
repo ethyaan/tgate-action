@@ -63,10 +63,10 @@ const parseAndValidateInputs = () => {
     const disable_web_page_preview = getInput('disable_web_page_preview') || false;
     const disable_notification = getInput('disable_notification') || false;
     const status = getInput('status');
-    const event = getInput('status');
-    const actor = getInput('status');
-    const repository = getInput('status');
-    const workflow = getInput('status');
+    const event = getInput('event');
+    const actor = getInput('actor');
+    const repository = getInput('repository');
+    const workflow = getInput('workflow');
 
     checkFieldValidity(token, 'Token is not valid');
     checkFieldValidity(to, 'to address is not valid');
