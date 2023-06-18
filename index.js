@@ -42,9 +42,9 @@ const sendTextMessage = async (token, chat_id, text, thread_id = null, disable_w
     URL.append('text', text);
 
     try {
-        const url = `https://api.telegram.org/bot${token}/sendMessage?${URL.toString()}`;
-        console.log('URLIS =>', url);
-        await axios.get(`https://api.telegram.org/bot${token}/sendMessage?${URL.toString()}`);
+        await axios.get(`/bot${token}/sendMessage?${URL.toString()}`, {
+            baseURL: 'https://api.telegram.org'
+        });
     } catch (error) {
         Logger.error('Error Sending Telegram Message');
     }
