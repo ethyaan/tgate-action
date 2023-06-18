@@ -1,6 +1,6 @@
 name: 'Telegram Notification Gate'
-description: 'Telegram Notification for Github action'
-author: 'Ethyaan'
+description: 'Send Github events as notification to Telegram messenger'
+author: 'Ethyaan <https://github.com/ethyaan>'
 
 inputs:
   token:
@@ -8,10 +8,9 @@ inputs:
     required: true
   to:
     description: 'Chat id, group or chanel'
+    required: true
   thread_id:
     description: 'id of thread or topic to send inside'
-  text:
-    description: 'text message'
   disable_web_page_preview:
     description: 'disables link previews for links in this message'
   disable_notification:
