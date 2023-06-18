@@ -9714,7 +9714,7 @@ const parseAndValidateInputs = () => {
     checkFieldValidity(to, 'to address is not valid');
 
     return {
-        token, to, thread_id, text, disable_web_page_preview, disable_notification,
+        token, to, thread_id, disable_web_page_preview, disable_notification,
         status, event, actor, repository, workflow
     };
 }
@@ -9787,7 +9787,7 @@ async function run() {
     // get & check inputs and validity 
     const {
         event: Event, repository, actor, status, workflow,
-        token, to, text, thread_id, disable_web_page_preview,
+        token, to, thread_id, disable_web_page_preview,
         disable_notification } = parseAndValidateInputs();
     const link = generateLink(Event, repository);
     const message = composer(status, Event, actor, repository, workflow, link);
