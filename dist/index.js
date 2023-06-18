@@ -9666,7 +9666,7 @@ const checkFieldValidity = (field, message) => {
  * @param {*} disable_notification 
  */
 const sendTextMessage = (token, chat_id, text, thread_id = null, disable_web_page_preview = false, disable_notification = false) => {
-    const URL = new URLSearchParams(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}`);
+    const URL = new URLSearchParams(`chat_id=${chat_id}`);
 
     /**
      * append params
@@ -9686,7 +9686,7 @@ const sendTextMessage = (token, chat_id, text, thread_id = null, disable_web_pag
     URL.append('text', text);
 
     try {
-        lib_axios.get(URL.toString());
+        lib_axios.get(`https://api.telegram.org/bot${token}/sendMessage?${URL.toString()}`);
     } catch (error) {
         Logger.error('Error Sending Telegram Message');
     }
