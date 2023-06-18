@@ -9736,7 +9736,7 @@ const generateLink = (e, repository) => {
         "push": "commits",
         "project_card": "projects",
     };
-    console.log('EEEE =>', e);
+
     const type = mappings[e.toLowerCase()];
     return `https://github.com/${repository}/${type}/`;
 
@@ -9776,6 +9776,9 @@ const composer = (status, event, actor, repo, workflow, link) => {
     let Event = allReplace(event, replacers).toUpperCase();
     let Repo = allReplace(repo, replacers).toLowerCase();
     let Actor = allReplace(actor, replacers).toLowerCase();
+
+    console.log('_DEBUG_ =>', Event, Repo, Actor);
+    console.log('_DEBUG_ =>', event, repo, actor);
 
     const text = `${icons[status]} *${Event}*
     was made at ${Repo}
