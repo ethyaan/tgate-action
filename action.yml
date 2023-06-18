@@ -1,4 +1,4 @@
-name: 'Telegram Gate'
+name: 'Telegram Notification Gate'
 description: 'Telegram Notification for Github action'
 author: 'Ethyaan'
 
