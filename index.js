@@ -38,12 +38,12 @@ const sendTextMessage = async (token, chat_id, text, thread_id = null, disable_w
     appendFn('message_thread_id', thread_id);
     appendFn('disable_web_page_preview', disable_web_page_preview);
     appendFn('disable_notification', disable_notification);
-
     URL.append('text', text);
 
     try {
-        await axios.get(`/bot${token}/sendMessage?${URL.toString()}`, {
-            baseURL: 'https://api.telegram.org'
+        await axios.get(`/bot${token}/sendMessage`, {
+            baseURL: 'https://api.telegram.org',
+            params: URL
         });
     } catch (error) {
         Logger.error('Error Sending Telegram Message');
@@ -92,7 +92,7 @@ const generateLink = (e, repository) => {
         "push": "commits",
         "project_card": "projects",
     };
-
+    console.log('EEEE =>', e);
     const type = mappings[e.toLowerCase()];
     return `https://github.com/${repository}/${type}/`;
 
@@ -150,7 +150,7 @@ async function run() {
     const link = generateLink(Event, repository);
     const message = composer(status, Event, actor, repository, workflow, link);
 
-    sendTextMessage(token, to, encodeURI(message), thread_id, disable_web_page_preview, disable_notification);
+    sendTextMessage(token, to, message, thread_id, disable_web_page_preview, disable_notification);
 }
 
 run().catch(e => setFailed(e));
