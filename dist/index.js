@@ -16737,6 +16737,6 @@ async function run() {
     sendTextMessage(token, to, message, thread_id, disable_web_page_preview, disable_notification);
 }
 
-run().catch(e => (0,core.setFailed)(e));
+run().catch(e => (0,core.setFailed)(e.toString()));
 })();
 

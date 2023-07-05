@@ -173,4 +173,4 @@ async function run() {
     sendTextMessage(token, to, message, thread_id, disable_web_page_preview, disable_notification);
 }
 
-run().catch(e => setFailed(e));
+run().catch(e => setFailed(e.toString()));
