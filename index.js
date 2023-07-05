@@ -118,7 +118,7 @@ const composer = (status, event, actor, repo, workflow, link) => {
     };
 
     console.log('context =>', context);
-    console.log('info =>', context);
+    info('info =>', context);
 
     const enevtHandlers = {
         "issue_comment": {
