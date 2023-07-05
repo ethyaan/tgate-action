@@ -155,7 +155,7 @@ const composer = (status, event) => {
         }
     };
 
-    const handledEvent = (enevtHandlers[event]) ? enevtHandlers[event].fn() : enevtHandlers['default'].fn();
+    let handledEvent = (enevtHandlers[event]) ? enevtHandlers[event].fn() : enevtHandlers['default'].fn();
     handledEvent += ` by [${senderUser}](${userURL}) \n Action status: ${icons[status]} ${status}`;
 
     return handledEvent;
@@ -173,4 +173,4 @@ async function run() {
     sendTextMessage(token, to, message, thread_id, disable_web_page_preview, disable_notification);
 }
 
-run().catch(e => setFailed(e.toString()));
+run().catch(e => setFailed(e));
