@@ -9771,25 +9771,17 @@ const composer = (status, event, actor, repo, workflow, link) => {
         "cancelled": "❕❕❕",
         "success": "✅✅✅"
     };
-    const replacers = { "_": "\\_", "-": "\\-", ".": "\\." };
 
-    let Event = allReplace(event, replacers).toUpperCase();
-    let Repo = allReplace(repo, replacers).toLowerCase();
-    let Actor = allReplace(actor, replacers).toLowerCase();
-
-    console.log('_DEBUG_ =>', Event, Repo, Actor);
-    console.log('_DEBUG_ =>', event, repo, actor);
-
-    const text = `${icons[status]} *${Event}*
-    was made at ${Repo}
-    by ${Actor}
+    const text = `${icons[status]} *${event.toUpperCase()}*
+    was made at ${repo}
+    by ${actor}
     check here [${workflow}](${link})`;
     return text;
 }
 
 async function run() {
 
-    // get & check inputs and validity 
+    // get & check inputs and validity
     const {
         event: Event, repository, actor, status, workflow,
         token, to, thread_id, disable_web_page_preview,

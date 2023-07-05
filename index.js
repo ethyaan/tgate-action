@@ -1,4 +1,5 @@
 import { setFailed, getInput } from '@actions/core';
+import { context } from '@actions/github';
 import axios from 'axios';
 
 /**
@@ -99,19 +100,6 @@ const generateLink = (e, repository) => {
 }
 
 /**
- * replace all string in given array
- * @param {*} str 
- * @param {*} obj 
- * @returns 
- */
-function allReplace(str, obj) {
-    for (const x in obj) {
-        str = str.replace(new RegExp(x, 'g'), obj[x]);
-    }
-    return str;
-};
-
-/**
  * compose our message
  * @param {*} status 
  * @param {*} event 
@@ -122,30 +110,34 @@ function allReplace(str, obj) {
  * @returns 
  */
 const composer = (status, event, actor, repo, workflow, link) => {
+
     const icons = {
         "failure": "❗️❗️❗️",
         "cancelled": "❕❕❕",
         "success": "✅✅✅"
     };
-    const replacers = { "_": "\\_", "-": "\\-", ".": "\\." };
 
-    let Event = allReplace(event, replacers).toUpperCase();
-    let Repo = allReplace(repo, replacers).toLowerCase();
-    let Actor = allReplace(actor, replacers).toLowerCase();
+    console.log('context =>', context);
 
-    console.log('_DEBUG_ =>', Event, Repo, Actor);
-    console.log('_DEBUG_ =>', event, repo, actor);
+    const enevtHandlers = {
+        "issue_comment": {
+            fn: () => {
+                // created, edited, deleted
 
-    const text = `${icons[status]} *${Event}*
-    was made at ${Repo}
-    by ${Actor}
+            }
+        }
+    };
+
+    const text = `${icons[status]} *${event.toUpperCase()}*
+    was made at ${repo}
+    by ${actor}
     check here [${workflow}](${link})`;
     return text;
 }
 
 async function run() {
 
-    // get & check inputs and validity 
+    // get & check inputs and validity
     const {
         event: Event, repository, actor, status, workflow,
         token, to, thread_id, disable_web_page_preview,
