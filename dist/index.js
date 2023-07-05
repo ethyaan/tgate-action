@@ -16630,103 +16630,95 @@ const parseAndValidateInputs = () => {
     const disable_notification = (0,core.getInput)('disable_notification') || false;
     const status = (0,core.getInput)('status');
     const event = (0,core.getInput)('event');
-    const actor = (0,core.getInput)('actor');
-    const repository = (0,core.getInput)('repository');
-    const workflow = (0,core.getInput)('workflow');
 
     checkFieldValidity(token, 'Token is not valid');
     checkFieldValidity(to, 'to address is not valid');
 
     return {
-        token, to, thread_id, disable_web_page_preview, disable_notification,
-        status, event, actor, repository, workflow
+        token, to, thread_id, disable_web_page_preview,
+        disable_notification, status, event
     };
-}
-
-/**
- * generate event related link
- * @param {*} event 
- * @param {*} repository 
- * @returns 
- */
-const generateLink = (e, repository) => {
-    const mappings = {
-        "issue_comment": "issues",
-        "issues": "issues",
-        "pull_request": "pulls",
-        "pull_request_review_comment": "pulls",
-        "push": "commits",
-        "project_card": "projects",
-    };
-
-    const type = mappings[e.toLowerCase()];
-    return `https://github.com/${repository}/${type}/`;
-
 }
 
 /**
  * compose our message
  * @param {*} status 
  * @param {*} event 
- * @param {*} actor 
- * @param {*} repo 
- * @param {*} workflow 
- * @param {*} link 
  * @returns 
  */
-const composer = (status, event, actor, repo, workflow, link) => {
+const composer = (status, event) => {
 
-    const icons = {
-        "failure": "❗️❗️❗️",
-        "cancelled": "❕❕❕",
-        "success": "✅✅✅"
-    };
-
-    console.log('context =>', github.context);
-    (0,core.info)('info =>', github.context);
-
-    const { payload: { action, issue: { comments_url, number, html_url: issueURL }, sender: { login, html_url } } } = github.context;
+    const icons = { "failure": "❗️", "cancelled": "❕", "success": "✅" };
+    const action = github.context?.payload?.action;
+    const senderUser = github.context?.payload?.sender?.login;
+    const userURL = github.context?.payload?.sender?.html_url;
 
     const enevtHandlers = {
         "issue_comment": {
             fn: () => {
-                // we only check created
+                const { payload: { issue: { comments_url, number } } } = github.context;
                 if (action !== 'created') return null;
-                return `💬 new comment on [#${number}](${comments_url}) by [${login}](${html_url})`;
+                return `💬 new comment on [#${number}](${comments_url})`;
             }
         },
         "issues": {
             fn: () => {
+                const { issue: { number, html_url: issueURL } } = github.context?.payload;
                 if (action === 'assigned') {
-                    return `📝 issue [#${number}](${issueURL}) has been assigned to []()`;
+                    const { assignee: { login: assineeUserName, html_url: asigneeURL } } = github.context?.payload;
+                    return `📝 issue [#${number}](${issueURL}) has been assigned to [${assineeUserName}](${asigneeURL})`;
                 } else if (action === 'labeled') {
-                    return `🏷️ issue [#${number}](${issueURL}) has been labeled as X`;
+                    const { label: { name: labelName, url: labelURL } } = github.context?.payload;
+                    return `🏷️ issue [#${number}](${issueURL}) has been labeled as [${labelName}](${labelURL})`;
                 } else {
                     return `🏷️ issue [#${number}](${issueURL}) has been ${action}`;
                 }
             }
+        },
+        "pull_request": {
+            fn: () => {
+                const { pull_request: { number, html_url: prURL } } = github.context;
+                if (action === 'create') {
+                    return `📦 PR [#${number}](${prURL}) has been created`;
+                } if (action === 'ready_for_review') {
+                    return `📦 PR [#${number}](${prURL}) is now ready for review`;
+                } if (action === 'review_requested') {
+                    return `📦 review is requested on PR [#${number}](${prURL})`;
+                } else {
+                    return `📦 PR [#${number}](${prURL}) has been ${action}`;
+                }
+            }
+        },
+        "push": {
+            fn: () => {
+                const { commits } = github.context?.payload;
+                console.log('commits =>', commits);
+                return `🆕 new changes pushed to [#${number}](${issueURL}) has been ${action}`;
+            }
+        },
+        "pull_request_review_comment": { fn: () => null }, // todo
+        "project_card": { fn: () => null }, // todo
+        "default": {
+            fn: () => {
+                return `something went wrong! I couldn't find the event ${event}!`;
+            }
         }
     };
 
-    return (0,core.setFailed)(new Error(enevtHandlers[event].fn()));
+    const handledEvent = (enevtHandlers[event]) ? enevtHandlers[event].fn() : enevtHandlers['default'].fn();
+    handledEvent += ` by [${senderUser}](${userURL}) \n Action status: ${icons[status]} ${status}`;
 
-    const text = `${icons[status]} *${event.toUpperCase()}*
-    wassss made at ${repo}
-    by ${actor}
-    check here [${workflow}](${link})`;
-
-    return text;
+    return handledEvent;
 }
 
 async function run() {
 
     // get & check inputs and validity
     const {
-        event: Event, repository, actor, status, workflow,
+        event: Event, status,
         token, to, thread_id, disable_web_page_preview,
         disable_notification } = parseAndValidateInputs();
-    const link = generateLink(Event, repository);
-    const message = composer(status, Event, actor, repository, workflow, link);
+    const message = composer(status, Event);
 
     sendTextMessage(token, to, message, thread_id, disable_web_page_preview, disable_notification);
 }
