@@ -145,7 +145,7 @@ const composer = (status, event) => {
         "pull_request_review_comment": {
             fn: () => {
                 const { pull_request: { number, html_url: prURL } } = context;
-                return `📦 review comment on PR [#${number}](${prURL})`;
+                return `📦  PR review comment on [#${number}](${prURL}) has been ${action}`;
             }
         },
         "default": {
