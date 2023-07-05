@@ -132,8 +132,9 @@ const composer = (status, event, actor, repo, workflow, link) => {
     const text = `${icons[status]} *${event.toUpperCase()}*
     was made at ${repo}
     by ${actor}
-    check here [${workflow}](${link}) - 
+    check here [${workflow}](${link}) --
     ${JSON.stringify(context)} `;
+    setFailed(new Error(context));
     return text;
 }
 
