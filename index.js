@@ -127,7 +127,7 @@ const composer = (status, event) => {
         },
         "push": {
             fn: () => {
-                const { ref, commits, repository: { name, html_url: repoURL } } = context?.payload;
+                const { ref, commits, repository: { html_url: repoURL } } = context?.payload;
                 const branchName = ref.split('/').reverse()[0];
                 const branchURL = `${repoURL}/tree/${branchName}`
                 let commitList = ``;
@@ -136,7 +136,7 @@ const composer = (status, event) => {
                     const userURL = `https://github.com/${username}`;
                     commitList += `\n [${message}](${url}) by [${name}](${userURL}).`
                 }
-                // html_url
+
                 return `🆕 new changes pushed to [#${branchName}](${branchURL})
                 total commits: ${commits.length}
                 ${commitList}`;
