@@ -16697,8 +16697,8 @@ const composer = (status, event) => {
                 let commitList = ``;
                 for (let commit of commits) {
                     const { url, message, committer: { name, username } } = commit;
-                    const userURL = `https://github.com/${username}`;
-                    commitList += `\n [${message}](${url}) by [${name}](${userURL}).`
+                    const committerURL = `https://github.com/${username}`;
+                    commitList += `\n [${message}](${url}) by [${name}](${committerURL}).`
                 }
 
                 return `🆕 new changes pushed to [#${branchName}](${branchURL})
