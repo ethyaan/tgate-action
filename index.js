@@ -94,7 +94,7 @@ const composer = (status, event) => {
             fn: () => {
                 const { payload: { issue: { comments_url, number } } } = context;
                 if (action !== 'created') return null;
-                return `💬 new comment on [#${number}](${comments_url})`;
+                return `💬 new comment on [\\#${number}](${comments_url})`;
             }
         },
         "issues": {
@@ -102,12 +102,12 @@ const composer = (status, event) => {
                 const { issue: { number, html_url: issueURL } } = context?.payload;
                 if (action === 'assigned') {
                     const { assignee: { login: assineeUserName, html_url: asigneeURL } } = context?.payload;
-                    return `📝 issue [#${number}](${issueURL}) has been assigned to [${assineeUserName}](${asigneeURL})`;
+                    return `📝 issue [\\#${number}](${issueURL}) has been assigned to [${assineeUserName}](${asigneeURL})`;
                 } else if (action === 'labeled') {
                     const { label: { name: labelName, url: labelURL } } = context?.payload;
-                    return `🏷️ issue [#${number}](${issueURL}) has been labeled as [${labelName}](${labelURL})`;
+                    return `🏷️ issue [\\#${number}](${issueURL}) has been labeled as [${labelName}](${labelURL})`;
                 } else {
-                    return `🏷️ issue [#${number}](${issueURL}) has been ${action}`;
+                    return `🏷️ issue [\\#${number}](${issueURL}) has been ${action}`;
                 }
             }
         },
@@ -115,13 +115,13 @@ const composer = (status, event) => {
             fn: () => {
                 const { pull_request: { number, html_url: prURL } } = context;
                 if (action === 'create') {
-                    return `📦 PR [#${number}](${prURL}) has been created`;
+                    return `📦 PR [\\#${number}](${prURL}) has been created`;
                 } if (action === 'ready_for_review') {
-                    return `📦 PR [#${number}](${prURL}) is now ready for review`;
+                    return `📦 PR [\\#${number}](${prURL}) is now ready for review`;
                 } if (action === 'review_requested') {
-                    return `📦 review is requested on PR [#${number}](${prURL})`;
+                    return `📦 review is requested on PR [\\#${number}](${prURL})`;
                 } else {
-                    return `📦 PR [#${number}](${prURL}) has been ${action}`;
+                    return `📦 PR [\\#${number}](${prURL}) has been ${action}`;
                 }
             }
         },
@@ -137,7 +137,7 @@ const composer = (status, event) => {
                     commitList += `\n [${message}](${url}) by [${name}](${committerURL}).`
                 }
 
-                return `🆕 new changes pushed to [#${branchName}](${branchURL})
+                return `🆕 new changes pushed to [${branchName}](${branchURL})
                 total commits: ${commits.length}
                 ${commitList}`;
             }
@@ -145,7 +145,7 @@ const composer = (status, event) => {
         "pull_request_review_comment": {
             fn: () => {
                 const { pull_request: { number, html_url: prURL } } = context;
-                return `📦  PR review comment on [#${number}](${prURL}) has been ${action}`;
+                return `📦  PR review comment on [\\#${number}](${prURL}) has been ${action}`;
             }
         },
         "default": {
