@@ -17,14 +17,14 @@ name: Telegram Gate
 
 on:
   issue_comment:
-    types: created
+    types: [created]
   issues:
     types: [opened, edited, pinned, closed, reopened, assigned, labeled]
   pull_request:
     types:
       [opened, closed, edited, ready_for_review, review_requested, reopened]
   pull_request_review_comment:
-    types: created
+    types: [created]
   push:
 
 jobs:
