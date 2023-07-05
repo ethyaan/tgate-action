@@ -16612,7 +16612,7 @@ const sendTextMessage = async (token, chat_id, text, thread_id = null, disable_w
             params: URL
         });
     } catch (error) {
-        Logger.error('Error Sending Telegram Message');
+        console.error('Error Sending Telegram Message', error);
     }
 }
 
