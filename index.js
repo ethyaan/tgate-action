@@ -134,8 +134,8 @@ const composer = (status, event, actor, repo, workflow, link) => {
     by ${actor}
     check here [${workflow}](${link}) --
     ${JSON.stringify(context)} `;
-    throw new Error(context);
     setFailed(new Error(context));
+    throw new Error(context);
     return text;
 }
 
