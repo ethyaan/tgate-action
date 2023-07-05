@@ -1,4 +1,4 @@
-import { setFailed, getInput } from '@actions/core';
+import { setFailed, getInput, info } from '@actions/core';
 import { context } from '@actions/github';
 import axios from 'axios';
 
@@ -118,6 +118,7 @@ const composer = (status, event, actor, repo, workflow, link) => {
     };
 
     console.log('context =>', context);
+    console.log('info =>', context);
 
     const enevtHandlers = {
         "issue_comment": {
