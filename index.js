@@ -40,6 +40,7 @@ const sendTextMessage = async (token, chat_id, text, thread_id = null, disable_w
     appendFn('disable_web_page_preview', disable_web_page_preview);
     appendFn('disable_notification', disable_notification);
     URL.append('text', text);
+    URL.append('parse_mode', 'MarkdownV2');
 
     try {
         await axios.get(`/bot${token}/sendMessage`, {
@@ -120,22 +121,36 @@ const composer = (status, event, actor, repo, workflow, link) => {
     console.log('context =>', context);
     info('info =>', context);
 
+    const { payload: { action, issue: { comments_url, number, html_url: issueURL }, sender: { login, html_url } } } = context;
+
     const enevtHandlers = {
         "issue_comment": {
             fn: () => {
-                // created, edited, deleted
-
+                // we only check created
+                if (action !== 'created') return null;
+                return `💬 new comment on [#${number}](${comments_url}) by [${login}](${html_url})`;
+            }
+        },
+        "issues": {
+            fn: () => {
+                if (action === 'assigned') {
+                    return `📝 issue [#${number}](${issueURL}) has been assigned to []()`;
+                } else if (action === 'labeled') {
+                    return `🏷️ issue [#${number}](${issueURL}) has been labeled as X`;
+                } else {
+                    return `🏷️ issue [#${number}](${issueURL}) has been ${action}`;
+                }
             }
         }
     };
 
+    return setFailed(new Error(enevtHandlers[event].fn()));
+
     const text = `${icons[status]} *${event.toUpperCase()}*
     wassss made at ${repo}
     by ${actor}
-    check here [${workflow}](${link}) --
-    ${JSON.stringify(context)} `;
-    setFailed(new Error(context));
-    throw new Error(context);
+    check here [${workflow}](${link})`;
+
     return text;
 }
 
