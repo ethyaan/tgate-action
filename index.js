@@ -137,9 +137,7 @@ const composer = (status, event) => {
                     commitList += `\n [${message}](${url}) by [${name}](${committerURL})`
                 }
 
-                return `🆕 new changes pushed to [${branchName}](${branchURL})
-                total commits: ${commits.length}
-                ${commitList}`;
+                return `🆕 new changes pushed to [${branchName}](${branchURL}) \n total commits: ${commits.length} ${commitList}`;
             }
         },
         "pull_request_review_comment": {
@@ -156,7 +154,7 @@ const composer = (status, event) => {
     };
 
     let handledEvent = (enevtHandlers[event]) ? enevtHandlers[event].fn() : enevtHandlers['default'].fn();
-    handledEvent += ` by [${senderUser}](${userURL}) \n Action status: ${icons[status]} ${status}`;
+    handledEvent += `\n by [${senderUser}](${userURL}) \n Action status: ${icons[status]} ${status}`;
 
     return handledEvent;
 }
