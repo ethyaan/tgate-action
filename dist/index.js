@@ -16691,13 +16691,27 @@ const composer = (status, event) => {
         },
         "push": {
             fn: () => {
-                const { commits } = github.context?.payload;
-                console.log('commits =>', commits);
-                return `🆕 new changes pushed to [#${number}](${issueURL}) has been ${action}`;
+                const { ref, commits, repository: { name, html_url: repoURL } } = github.context?.payload;
+                const branchName = ref.split('/').reverse()[0];
+                const branchURL = `${repoURL}/tree/${branchName}`
+                let commitList = ``;
+                for (let commit of commits) {
+                    const { url, message, committer: { name, username } } = commit;
+                    const userURL = `https://github.com/${username}`;
+                    commitList += `\n [${message}](${url}) by [${name}](${userURL}).`
+                }
+                // html_url
+                return `🆕 new changes pushed to [#${branchName}](${branchURL})
+                total commits: ${commits.length}
+                ${commitList}`;
             }
         },
-        "pull_request_review_comment": { fn: () => null }, // todo
-        "project_card": { fn: () => null }, // todo
+        "pull_request_review_comment": {
+            fn: () => {
+                const { pull_request: { number, html_url: prURL } } = github.context;
+                return `📦 review comment on PR [#${number}](${prURL})`;
+            }
+        },
         "default": {
             fn: () => {
                 return `something went wrong! I couldn't find the event ${event}!`;
