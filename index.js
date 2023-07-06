@@ -82,8 +82,7 @@ const parseAndValidateInputs = () => {
  * @param {*} skips 
  * @returns 
  */
-const markDownEscape = (string, skips) => {
-    skips = skips || [];
+const markDownEscape = (string) => {
     return [
         [/\*/g, '\\*', 'asterisks'],
         [/#/g, '\\#', 'number signs'],
@@ -98,10 +97,7 @@ const markDownEscape = (string, skips) => {
         [/`/g, '\\`', 'codeblocks']
         [/./g, '\\.', 'dot']
     ].reduce(function (string, replacement) {
-        var name = replacement[2]
-        return name && skips.indexOf(name) !== -1
-            ? string
-            : string.replace(replacement[0], replacement[1])
+        return name ? string : string.replace(replacement[0], replacement[1])
     }, string);
 }
 
