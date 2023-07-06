@@ -32,10 +32,6 @@ jobs:
     name: Telegram Gate
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout pull request 🏁
-        uses: actions/checkout@v3
-        with:
-          ref: refs/pull/${{ github.event.issue.number }}/head
       - name: Notifier
         uses: ethyaan/tgate-action@v1.0.0
         if: always()
@@ -48,6 +44,7 @@ jobs:
 ```
 
 ## Screenshots
+
 <br >
 
 ![](https://github.com/ethyaan/tgate-action/blob/main/screenshots/comment.png)
