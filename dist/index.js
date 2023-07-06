@@ -16658,6 +16658,7 @@ const markDownEscape = (string) => {
         [/</g, '&lt;', 'angle brackets'],
         [/>/g, '&gt;', 'angle brackets'],
         [/_/g, '\\_', 'underscores'],
+        [/-/g, '\\-', 'dash'],
         [/`/g, '\\`', 'codeblocks'],
         [/\./g, '\\.', 'dot']
     ].reduce(function (string, replacement) {
