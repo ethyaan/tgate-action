@@ -16605,7 +16605,7 @@ const sendTextMessage = async (token, chat_id, text, thread_id = null, disable_w
     appendFn('disable_notification', disable_notification);
     URL.append('text', text);
     URL.append('parse_mode', 'Markdown');
-    URL.append('disable_web_page_preview', false);
+    URL.append('disable_web_page_preview', true);
 
     try {
         await lib_axios.get(`/bot${token}/sendMessage`, {
