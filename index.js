@@ -157,10 +157,11 @@ const composer = (status, event) => {
                 const branchName = ref.split('/').reverse()[0];
                 const branchURL = `${repoURL}/tree/${branchName}`
                 let commitList = ``;
+                let index = 1;
                 for (let commit of commits) {
                     const { url, message, committer: { name, username } } = commit;
                     const committerURL = `https://github.com/${username}`;
-                    commitList += `\n [${message}](${url}) by [${name}](${committerURL})`
+                    commitList += `\n ${index++}- [${message}](${url}) by [${name}](${committerURL})`
                 }
 
                 return `🆕 new changes pushed to [${branchName}](${branchURL}) \n total commits: ${commits.length} ${commitList}`;
