@@ -96,6 +96,7 @@ const markDownEscape = (string, skips) => {
         [/>/g, '&gt;', 'angle brackets'],
         [/_/g, '\\_', 'underscores'],
         [/`/g, '\\`', 'codeblocks']
+        [/./g, '\\.', 'dot']
     ].reduce(function (string, replacement) {
         var name = replacement[2]
         return name && skips.indexOf(name) !== -1
