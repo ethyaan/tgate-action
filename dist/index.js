@@ -16641,6 +16641,34 @@ const parseAndValidateInputs = () => {
 }
 
 /**
+ * escape mardown characters
+ * @param {*} string 
+ * @param {*} skips 
+ * @returns 
+ */
+const markDownEscape = (string, skips) => {
+    skips = skips || [];
+    return [
+        [/\*/g, '\\*', 'asterisks'],
+        [/#/g, '\\#', 'number signs'],
+        [/\//g, '\\/', 'slashes'],
+        [/\(/g, '\\(', 'parentheses'],
+        [/\)/g, '\\)', 'parentheses'],
+        [/\[/g, '\\[', 'square brackets'],
+        [/\]/g, '\\]', 'square brackets'],
+        [/</g, '&lt;', 'angle brackets'],
+        [/>/g, '&gt;', 'angle brackets'],
+        [/_/g, '\\_', 'underscores'],
+        [/`/g, '\\`', 'codeblocks']
+    ].reduce(function (string, replacement) {
+        var name = replacement[2]
+        return name && skips.indexOf(name) !== -1
+            ? string
+            : string.replace(replacement[0], replacement[1])
+    }, string);
+}
+
+/**
  * compose our message
  * @param {*} status 
  * @param {*} event 
@@ -16720,7 +16748,7 @@ const composer = (status, event) => {
     let handledEvent = (enevtHandlers[event]) ? enevtHandlers[event].fn() : enevtHandlers['default'].fn();
     handledEvent += `\n by [${senderUser}](${userURL}) \n Action status: ${icons[status]} ${status}`;
 
-    return handledEvent.replace(/_|[*`~>#+=|{}()\.!-]/g, "\$&");
+    return markDownEscape(handledEvent);
 }
 
 async function run() {
