@@ -16656,9 +16656,10 @@ const composer = (status, event) => {
     const enevtHandlers = {
         "issue_comment": {
             fn: () => {
-                const { payload: { issue: { comments_url, number } } } = github.context;
+                console.log('_DEBUG_ =>', github.context);
+                const { payload: { issue: { html_url, number } } } = github.context;
                 if (action !== 'created') return null;
-                return `💬 new comment on [#${number}](${comments_url})`;
+                return `💬 new comment on [#${number}](${html_url})`;
             }
         },
         "issues": {
@@ -16719,7 +16720,7 @@ const composer = (status, event) => {
     };
 
     let handledEvent = (enevtHandlers[event]) ? enevtHandlers[event].fn() : enevtHandlers['default'].fn();
-    handledEvent += `\n by [${senderUser}](${userURL}) \n Action status: ${icons[status]} ${status}`;
+    handledEvent += `\n Action by [${senderUser}](${userURL}) \n Action status: ${icons[status]} ${status}`;
 
     return handledEvent;
 }
