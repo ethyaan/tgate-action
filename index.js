@@ -1,4 +1,4 @@
-import { setFailed, getInput, info } from '@actions/core';
+import { setFailed, getInput } from '@actions/core';
 import { context } from '@actions/github';
 import axios from 'axios';
 
@@ -89,10 +89,12 @@ const composer = (status, event) => {
     const senderUser = context?.payload?.sender?.login;
     const userURL = context?.payload?.sender?.html_url;
 
+    /**
+     * every event has a handler method that returns the corresponding message to the event and it's action
+     */
     const enevtHandlers = {
         "issue_comment": {
             fn: () => {
-                console.log('_DEBUG_ =>', context);
                 const { payload: { issue: { html_url, number } } } = context;
                 if (action !== 'created') return null;
                 return `💬 new comment on [#${number}](${html_url})`;

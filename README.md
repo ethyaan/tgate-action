@@ -46,3 +46,10 @@ jobs:
           disable_web_page_preview: false # set this to true to disable link previw in telegram
           disable_notification: false # set tjis true to send message in silet mode
 ```
+
+## Screenshots
+<br >
+
+![](https://github.com/ethyaan/tgate-action/blob/main/screenshots/comment.png)
+
+![](https://github.com/ethyaan/tgate-action/blob/main/screenshots/push-message.png)

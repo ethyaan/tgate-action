@@ -16653,10 +16653,12 @@ const composer = (status, event) => {
     const senderUser = github.context?.payload?.sender?.login;
     const userURL = github.context?.payload?.sender?.html_url;
 
+    /**
+     * every event has a handler method that returns the corresponding message to the event and it's action
+     */
     const enevtHandlers = {
         "issue_comment": {
             fn: () => {
-                console.log('_DEBUG_ =>', github.context);
                 const { payload: { issue: { html_url, number } } } = github.context;
                 if (action !== 'created') return null;
                 return `💬 new comment on [#${number}](${html_url})`;
