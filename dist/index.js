@@ -16641,32 +16641,6 @@ const parseAndValidateInputs = () => {
 }
 
 /**
- * escape mardown characters
- * @param {*} string 
- * @param {*} skips 
- * @returns 
- */
-const markDownEscape = (string) => {
-    return [
-        [/\*/g, '\\*', 'asterisks'],
-        [/#/g, '\\#', 'number signs'],
-        [/\//g, '\\/', 'slashes'],
-        [/\(/g, '\\(', 'parentheses'],
-        [/\)/g, '\\)', 'parentheses'],
-        [/\[/g, '\\[', 'square brackets'],
-        [/\]/g, '\\]', 'square brackets'],
-        [/</g, '&lt;', 'angle brackets'],
-        [/>/g, '&gt;', 'angle brackets'],
-        [/_/g, '\\_', 'underscores'],
-        [/-/g, '\\-', 'dash'],
-        [/`/g, '\\`', 'codeblocks'],
-        [/\./g, '\\.', 'dot']
-    ].reduce(function (string, replacement) {
-        return string.replace(replacement[0], replacement[1])
-    }, string);
-}
-
-/**
  * compose our message
  * @param {*} status 
  * @param {*} event 
@@ -16725,7 +16699,7 @@ const composer = (status, event) => {
                 for (let commit of commits) {
                     const { url, message, committer: { name, username } } = commit;
                     const committerURL = `https://github.com/${username}`;
-                    commitList += `\n ${index++}- [${message}](${url}) by [${name}](${committerURL})`
+                    commitList += `\n ${index++}- [${message.replace(/[\r\n]+/g, " ")}](${url}) by [${name}](${committerURL})`
                 }
 
                 return `🆕 new changes pushed to [${branchName}](${branchURL}) \n total commits: ${commits.length} ${commitList}`;
