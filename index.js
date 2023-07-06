@@ -41,7 +41,6 @@ const sendTextMessage = async (token, chat_id, text, thread_id = null, disable_w
     appendFn('disable_notification', disable_notification);
     URL.append('text', text);
     URL.append('parse_mode', 'Markdown');
-    URL.append('disable_web_page_preview', true);
 
     try {
         await axios.get(`/bot${token}/sendMessage`, {
@@ -117,7 +116,7 @@ const composer = (status, event) => {
         },
         "pull_request": {
             fn: () => {
-                const { pull_request: { number, html_url: prURL } } = context;
+                const { pull_request: { number, html_url: prURL } } = context?.payload;
                 if (action === 'create') {
                     return `📦 PR [#${number}](${prURL}) has been created`;
                 } if (action === 'ready_for_review') {
@@ -147,7 +146,7 @@ const composer = (status, event) => {
         },
         "pull_request_review_comment": {
             fn: () => {
-                const { pull_request: { number, html_url: prURL } } = context;
+                const { pull_request: { number, html_url: prURL } } = context?.payload;
                 return `📦  PR review comment on [#${number}](${prURL}) has been ${action}`;
             }
         },
