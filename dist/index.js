@@ -16746,7 +16746,7 @@ const composer = (status, event) => {
     let handledEvent = (enevtHandlers[event]) ? enevtHandlers[event].fn() : enevtHandlers['default'].fn();
     handledEvent += `\n by [${senderUser}](${userURL}) \n Action status: ${icons[status]} ${status}`;
 
-    return markDownEscape(handledEvent);
+    return handledEvent;
 }
 
 async function run() {
