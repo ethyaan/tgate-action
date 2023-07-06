@@ -16661,7 +16661,7 @@ const markDownEscape = (string) => {
         [/`/g, '\\`', 'codeblocks']
         [/./g, '\\.', 'dot']
     ].reduce(function (string, replacement) {
-        return name ? string : string.replace(replacement[0], replacement[1])
+        return string.replace(replacement[0], replacement[1])
     }, string);
 }
 
